@@ -1,4 +1,4 @@
-# Duel Manual (Speed Duel, jogo manual)
+# Duel (Speed Duel, jogo manual)
 
 App web instalável (PWA) para duelar no formato Speed Duel de forma manual: 3 zonas de monstro, 1 zona extra por jogador,
 3 zonas de mágica/armadilha, 2 zonas de pêndulo, Cemitério, Banidas, Deck e Extra Deck. Cartas vêm do banco YGOPRODeck

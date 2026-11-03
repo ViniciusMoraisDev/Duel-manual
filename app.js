@@ -17,19 +17,65 @@ const det=(c,hide)=>hide?`<div class="det"><div class="bg">${cardEl(c,1)}</div><
 async function search(q,sd){const r=await fetch(API+'?fname='+encodeURIComponent(q)+(sd?'&format=speed%20duel':'')+'&num=40&offset=0');return r.ok?(await r.json()).data.map(norm):[]}
 /* ---------- decks ---------- */
 let B;
-function decksView(){const D=ST('decks')||[];$('#decks').innerHTML=`<h2>Meus decks</h2>${D.map((d,i)=>`<div class="row"><b>${esc(d.n)}</b><span>${d.c.length}</span><button onclick="editDeck(${i})">Editar</button><button onclick="delDeck(${i})">Apagar</button></div>`).join('')||'<p>Nenhum deck ainda.</p>'}<div class="bt"><button onclick="editDeck(-1)">Novo deck</button><button onclick="show('menu')">Voltar</button></div>`;show('decks')}
+const T_MON='Effect Monster,Normal Monster,Flip Effect Monster,Flip Tuner Effect Monster,Gemini Monster,Normal Tuner Monster,Pendulum Effect Monster,Pendulum Flip Effect Monster,Pendulum Normal Monster,Pendulum Tuner Effect Monster,Ritual Effect Monster,Ritual Monster,Spirit Monster,Toon Monster,Tuner Monster,Union Effect Monster',
+T_EX='Fusion Monster,Link Monster,Pendulum Effect Fusion Monster,Synchro Monster,Synchro Pendulum Effect Monster,Synchro Tuner Monster,XYZ Monster,XYZ Pendulum Effect Monster',
+TYF={mon:T_MON,sp:'Spell Card',tr:'Trap Card',ex:T_EX},TN={fav:'Favoritos',mon:'Monstros',sp:'Magias',tr:'Armadilhas',ex:'Deck Adicional'},SORTS=[['name','Nome'],['new','Mais novas'],['atk','ATK'],['def','DEF'],['level','Nível'],['type','Tipo']];
+const ord=c=>({no:0,ef:1,fu:2,sy:3,xy:4,li:5,sp:6,tr:7})[kind(c)],lvb=c=>isMon(c)&&c.lvl?`<span class="lv">${/Link/i.test(c.type)?'L':'★'}${c.lvl}</span>`:'';
+const sortDeck=()=>B.c.sort((a,b)=>ord(a)-ord(b)||(b.lvl||0)-(a.lvl||0)||String(a.name).localeCompare(b.name));
+function decksView(){const D=ST('decks')||[];$('#decks').innerHTML=`<h2>Meus decks</h2>${D.map((d,i)=>`<div class="row"><b>${d.star?'★ ':''}${esc(d.n)}</b><span>${d.c.length}</span><button onclick="editDeck(${i})">Editar</button><button onclick="delDeck(${i})">Apagar</button></div>`).join('')||'<p>Nenhum deck ainda.</p>'}<div class="bt"><button onclick="editDeck(-1)">Novo deck</button><button onclick="show('menu')">Voltar</button></div>`;show('decks')}
 function delDeck(i){if(!confirm('Apagar deck?'))return;const D=ST('decks');D.splice(i,1);SV('decks',D);decksView()}
-function editDeck(i){const D=ST('decks')||[];B=i<0?{i:-1,n:'',c:[],res:[],tab:0,q:'',sd:0}:{i,n:D[i].n,c:D[i].c.slice(),res:[],tab:0,q:'',sd:0};bldView();show('bld')}
-function bldView(){const L=B.tab?B.c:B.res;$('#bld').innerHTML=`<div class="bh"><input value="${esc(B.n)}" placeholder="Nome do deck" oninput="B.n=this.value"><button onclick="saveDeck()">Salvar</button><button onclick="decksView()">Voltar</button></div><div class="bh"><input id="q" value="${esc(B.q)}" placeholder="Buscar carta (nome)" onkeydown="if(event.key=='Enter')doSearch()"><button onclick="doSearch()">Buscar</button></div><div class="bh"><label><input type="checkbox" id="sd" ${B.sd?'checked':''}> Só Speed Duel</label><button onclick="impSheet()">Importar .ydk</button></div><div class="tabs"><button class="${B.tab?'':'on'}" onclick="B.tab=0;bldView()">Resultados</button><button class="${B.tab?'on':''}" onclick="B.tab=1;bldView()">Deck (${B.c.length})</button></div><div class="gr big">${L.map((c,i)=>`<div class="hc" onclick="${B.tab?`rmCard(${i})`:`addSheet(${i})`}">${cardEl(c,0)}</div>`).join('')||'<p>'+(B.tab?'Deck vazio.':'Busque uma carta.')+'</p>'}</div>`}
-async function doSearch(){B.q=$('#q').value.trim();B.sd=$('#sd').checked;if(!B.q)return;toast('Buscando...');let r=[];try{r=await search(B.q,B.sd)}catch(e){toast('Sem conexão')}
-const cu=(ST('custom')||[]).filter(c=>c.name.toLowerCase().includes(B.q.toLowerCase()));B.res=cu.concat(r);B.tab=0;bldView()}
-function addSheet(i){const c=B.res[i];sheet(det(c)+`<div class="bt"><button onclick="B.c.push(B.res[${i}]);toast('Adicionada (${B.c.length+1})');closeSh();bldView()">Adicionar ao deck</button></div>`)}
-function rmCard(i){B.c.splice(i,1);bldView()}
-function saveDeck(){const D=ST('decks')||[],d={n:B.n||'Deck',c:B.c};if(B.i<0){D.push(d);B.i=D.length-1}else D[B.i]=d;if(SV('decks',D))toast('Deck salvo')}
+function editDeck(i){const D=ST('decks')||[];B=Object.assign({i,n:'',c:[],t:'',q:'',sd:0,staple:0,attr:'',lv:'',sort:'name',col:[],off:0,end:0,busy:0,rid:0,exp:0,big:0,lock:0,star:0},i<0?{}:{n:D[i].n,c:D[i].c.slice(),star:D[i].star||0});sortDeck();show('bld');reload()}
+function reload(){B.col=[];B.off=0;B.end=0;B.busy=0;B.rid++;bldView();loadMore()}
+function bldView(){const fl=[B.sd&&'Speed Duel',B.attr,B.lv&&'Nv '+B.lv,B.staple&&'Populares',B.q&&'"'+B.q+'"',B.t&&TN[B.t]].filter(Boolean).join(', ')||'Desl.',sn=SORTS.find(s=>s[0]==B.sort)[1],ch=(t,l)=>`<button class="${B.t==t?'on':''}" onclick="setT('${t}')">${l}</button>`;
+$('#bld').className='scr on'+(B.exp?' x':'');
+$('#bld').innerHTML=`<div class="dh"><div class="nm"><span>✎</span><input value="${esc(B.n)}" placeholder="Nome do deck" oninput="B.n=this.value"></div><button onclick="menuSheet()">MENU</button></div>
+<div class="dh2"><div class="cnt"><div>Deck Principal <b id="cm"></b></div><div>Deck Adicional <b id="ce"></b></div></div><div class="st" id="stt"></div><button class="sq" onclick="rulesSheet()">i</button></div>
+<div class="dh3"><button class="sq rd" onclick="clearDeck()">🗑</button><button onclick="autoDeck()">Automontar deck</button><button onclick="cfgSheet()">Configurações de Deck</button><button class="sq gn" onclick="B.lock^=1;toast(B.lock?'Deck travado':'Deck liberado');bldView()">${B.lock?'🔒':'🔓'}</button><button class="sq gn" onclick="B.star^=1;bldView()">${B.star?'★':'☆'}</button></div>
+<div class="dkp" id="dk"></div>
+<div class="dv"><button class="sq" onclick="togX(this)">${B.exp?'▼':'▲'}</button><div>Ordenar por: ${sn}<br>Filtro: ${esc(fl)}</div></div>
+<div class="chips fx">${ch('fav','★ Cards favoritos')}${ch('mon','Monstros')}${ch('sp','Magias')}${ch('tr','Armadilha')}${ch('ex','Deck Adicional')}</div>
+<div class="chips fx"><button onclick="fltSheet()">Filtro</button><button class="${B.staple?'on':''}" onclick="B.staple^=1;reload()">Cards populares</button><button onclick="txtSheet()">Busca por texto</button><button class="sq" onclick="clrF()">🗑</button></div>
+<div class="chips fx"><select onchange="B.sort=this.value;reload()">${SORTS.map(s=>`<option value="${s[0]}" ${s[0]==B.sort?'selected':''}>Ordenar por: ${s[1]}</option>`).join('')}</select><button class="sq" onclick="B.big^=1;renderCol(0)">▢</button></div>
+<div class="clp" id="cl" onscroll="colScroll(this)"></div>
+<div class="bb"><button class="sq" onclick="decksView()">←</button><button onclick="saveDeck()">SALVAR</button><button onclick="copyDeck()">Copiar Deck</button><button class="sq" onclick="show('menu')">⌂</button></div>`;renderDeck();renderCol(0)}
+function togX(b){B.exp^=1;$('#bld').classList.toggle('x',!!B.exp);b.textContent=B.exp?'▼':'▲'}
+function setT(t){B.t=B.t==t?'':t;reload()}
+function clrF(){Object.assign(B,{t:'',q:'',sd:0,staple:0,attr:'',lv:''});reload()}
+function renderDeck(){const m=B.c.filter(c=>!isEx(c)),e=B.c.filter(isEx),sl=(c)=>`<div class="sl" onclick="dkSheet(${B.c.indexOf(c)})">${cardEl(c,0)}${lvb(c)}</div>`,es=n=>`<div class="es">${n}</div>`;
+let h=m.map(sl).join('');for(let i=m.length;i<Math.min(30,Math.max(24,Math.ceil(m.length/6)*6));i++)h+=es(i+1);
+h+='<div class="xh">Deck Adicional</div>'+e.map(sl).join('');for(let i=e.length;i<6;i++)h+=es(i+1);
+$('#dk').innerHTML=h;$('#cm').textContent=m.length;$('#cm').style.color=m.length<20||m.length>30?'#ff7070':'#fff';$('#ce').textContent=e.length;
+$('#stt').textContent=m.length<20?'Faltam '+(20-m.length)+' cartas no deck principal':m.length>30?'Deck principal passa de 30':e.length>6?'Deck adicional passa de 6':'Deck válido para Speed Duel'}
+const custom=()=>(ST('custom')||[]).filter(c=>(!B.q||c.name.toLowerCase().includes(B.q.toLowerCase()))&&({'':1,mon:isMon(c)&&!isEx(c),sp:/Spell/.test(c.type),tr:/Trap/.test(c.type),ex:isEx(c)})[B.t]);
+async function loadMore(){if(B.busy||B.end)return;B.busy=1;const rid=B.rid,from=B.col.length;
+try{let data=[];
+if(B.t=='fav'){const f=ST('fav')||[];B.end=1;if(f.length){const r=await fetch(API+'?id='+f.join(','));if(r.ok)data=(await r.json()).data.map(norm)}}
+else{if(B.off==0)data=custom();let u=API+'?num=60&offset='+B.off+'&sort='+B.sort;if(B.t)u+='&type='+encodeURIComponent(TYF[B.t]);if(B.q)u+='&fname='+encodeURIComponent(B.q);if(B.sd)u+='&format=speed%20duel';if(B.staple)u+='&staple=yes';if(B.attr)u+='&attribute='+B.attr;if(B.lv)u+='&level='+B.lv;
+const r=await fetch(u);if(r.ok){const d=(await r.json()).data;data=data.concat(d.map(norm));B.off+=60;if(d.length<60)B.end=1}else B.end=1}
+if(rid!=B.rid)return;B.col=B.col.concat(data)}catch(e){toast('Sem conexão');B.end=1}
+B.busy=0;renderCol(from)}
+function colScroll(el){if(el.scrollTop+el.clientHeight>el.scrollHeight-400)loadMore()}
+function renderCol(from){const el=$('#cl');if(!el)return;const s=el.scrollTop;el.className='clp'+(B.big?' b3':'');
+const h=(c,i)=>{const n=B.c.filter(x=>x.id==c.id).length;return`<div class="ci" onclick="colSheet(${i})">${cardEl(c,0)}${lvb(c)}${n?`<span class="cn">${n}</span>`:''}</div>`};
+if(from>0)el.insertAdjacentHTML('beforeend',B.col.slice(from).map((c,j)=>h(c,from+j)).join(''));else{el.innerHTML=B.col.map(h).join('')||`<p>${B.end?'Nenhuma carta encontrada.':'Carregando...'}</p>`;el.scrollTop=s}}
+function addC(c){if(B.lock)return toast('Deck travado');if(B.c.filter(x=>x.id==c.id).length>=3)return toast('Máximo 3 cópias');const ex=isEx(c);if(ex?B.c.filter(isEx).length>=6:B.c.filter(x=>!isEx(x)).length>=30)return toast(ex?'Deck adicional cheio (6)':'Deck principal cheio (30)');B.c.push(c);sortDeck();renderDeck();renderCol(0)}
+function rmId(id){if(B.lock)return toast('Deck travado');const i=B.c.map(x=>x.id).lastIndexOf(id);if(i>=0){B.c.splice(i,1);renderDeck();renderCol(0)}}
+function colSheet(i){const c=B.col[i],n=B.c.filter(x=>x.id==c.id).length,f=(ST('fav')||[]).includes(c.id);sheet(det(c)+`<div class="bt"><button onclick="addC(B.col[${i}]);colSheet(${i})">Adicionar (${n}/3)</button><button onclick="rmId(B.col[${i}].id);colSheet(${i})">Remover</button><button onclick="favT(B.col[${i}].id);colSheet(${i})">${f?'★ Favorito':'☆ Favoritar'}</button></div>`)}
+function dkSheet(i){const c=B.c[i];if(!c)return;sheet(det(c)+`<div class="bt"><button onclick="closeSh()">Fechar</button><button onclick="rmId(B.c[${i}].id);closeSh()">Remover do deck</button></div>`)}
+function favT(id){let f=ST('fav')||[];f=f.includes(id)?f.filter(x=>x!=id):f.concat(id);SV('fav',f)}
+function autoDeck(){if(B.lock)return toast('Deck travado');shuf(B.col.slice()).forEach(c=>{if(!isEx(c)&&B.c.filter(x=>!isEx(x)).length<20&&B.c.filter(x=>x.id==c.id).length<3)B.c.push(c)});sortDeck();renderDeck();renderCol(0)}
+function clearDeck(){if(B.lock)return toast('Deck travado');if(confirm('Remover todas as cartas?')){B.c=[];renderDeck();renderCol(0)}}
+function saveDeck(){const D=ST('decks')||[],d={n:B.n||'Deck',c:B.c,star:B.star};if(B.i<0){D.push(d);B.i=D.length-1}else D[B.i]=d;if(SV('decks',D))toast('Deck salvo')}
+function copyDeck(){const ok=c=>/^\d+$/.test(c.id),t='#created by Duel\n#main\n'+B.c.filter(c=>!isEx(c)&&ok(c)).map(c=>c.id).join('\n')+'\n#extra\n'+B.c.filter(c=>isEx(c)&&ok(c)).map(c=>c.id).join('\n')+'\n!side\n';navigator.clipboard.writeText(t).then(()=>toast('Deck copiado (.ydk)'),()=>toast('Não foi possível copiar'))}
+function menuSheet(){sheet('<h3>Menu</h3><div class="bt"><button onclick="saveDeck();closeSh()">Salvar</button><button onclick="impSheet()">Importar .ydk</button><button onclick="copyDeck();closeSh()">Copiar Deck</button><button onclick="closeSh();decksView()">Sair</button></div>')}
+function cfgSheet(){sheet('<h3>Configurações de Deck</h3><div class="bt"><button onclick="impSheet()">Importar .ydk</button><button onclick="closeSh();clearDeck()">Limpar deck</button><button onclick="closeSh();cstView()">Criar carta</button></div>')}
+function rulesSheet(){sheet('<h3>Regras do deck</h3><p>Speed Duel: deck principal de 20 a 30 cartas, deck adicional de até 6 e no máximo 3 cópias de cada carta. Toque numa carta para ver o texto e adicionar ou remover.</p>')}
+function fltSheet(){const A=['','DARK','LIGHT','EARTH','WATER','FIRE','WIND','DIVINE'];sheet(`<h3>Filtro</h3><label><input type="checkbox" id="fs" ${B.sd?'checked':''}> Só Speed Duel</label><p>Atributo</p><select id="fa">${A.map(a=>`<option value="${a}" ${a==B.attr?'selected':''}>${a||'Todos'}</option>`).join('')}</select><p>Nível</p><select id="fl">${Array.from({length:13},(_,i)=>`<option value="${i||''}" ${(i||'')==B.lv?'selected':''}>${i||'Todos'}</option>`).join('')}</select><div class="bt"><button onclick="B.sd=$('#fs').checked?1:0;B.attr=$('#fa').value;B.lv=$('#fl').value;closeSh();reload()">Aplicar</button></div>`)}
+function txtSheet(){sheet(`<h3>Busca por texto</h3><input id="tq" value="${esc(B.q)}" placeholder="Nome da carta"><div class="bt"><button onclick="B.q=$('#tq').value.trim();closeSh();reload()">Buscar</button></div>`)}
 function impSheet(){sheet('<h3>Importar .ydk</h3><textarea id="yd" rows="8" placeholder="Cole o conteúdo do arquivo .ydk"></textarea><div class="bt"><button onclick="imp()">Importar</button></div>')}
 async function imp(){const ids=$('#yd').value.split(/!side/)[0].split(/\s+/).filter(x=>/^\d+$/.test(x));if(!ids.length)return toast('Nada para importar');closeSh();toast('Importando...');const u=[...new Set(ids)],M={};
 try{for(let i=0;i<u.length;i+=40){const r=await fetch(API+'?id='+u.slice(i,i+40).join(','));if(r.ok)(await r.json()).data.forEach(c=>M[c.id]=norm(c))}}catch(e){return toast('Sem conexão')}
-ids.forEach(i=>M[i]&&B.c.push(M[i]));B.tab=1;bldView();toast(B.c.length+' cartas no deck')}
+ids.forEach(i=>M[i]&&B.c.push(M[i]));sortDeck();renderDeck();renderCol(0);toast(B.c.length+' cartas no deck')}
 /* ---------- criar cartas ---------- */
 const TY=[['Normal Monster','Monstro Normal'],['Effect Monster','Monstro de Efeito'],['Pendulum Effect Monster','Monstro Pêndulo'],['Fusion Monster','Fusão'],['Synchro Monster','Sincro'],['XYZ Monster','Xyz'],['Link Monster','Link'],['Spell Card','Mágica'],['Trap Card','Armadilha']];
 let CC={};

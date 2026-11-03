@@ -5,7 +5,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
 .scr{display:none;flex:1;min-height:0;overflow:auto;padding:14px}.scr.on{display:flex;flex-direction:column}
 h1{font-size:36px;margin:10vh 0 0;color:var(--gold)}h2,h3{margin:6px 0}
 button,input,select,textarea{font:inherit;color:inherit;background:#1b3a4c;border:1px solid #2f5a73;border-radius:8px;padding:10px 12px;min-width:0}
-button{background:#25526b;font-weight:700}button.on{background:var(--gold);color:#222}
+
 input,textarea{-webkit-user-select:text;user-select:text;width:100%}input[type=checkbox]{width:auto}
 .bt{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.bt>button{flex:1 1 40%}.col{flex-direction:column}.col>button{padding:16px;font-size:16px}
 .bh{display:flex;gap:8px;margin:6px 0;align-items:center}.row{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #1f3b4c}.row b{flex:1}
@@ -34,3 +34,23 @@ em{position:absolute;right:3px;bottom:2px;background:#000b;padding:0 5px;border-
 .pn{position:absolute;left:0;right:0;bottom:0;max-height:88dvh;overflow:auto;background:#12293a;border-radius:16px 16px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom))}
 .det{display:flex;gap:12px;margin-bottom:6px}.bg{width:42%;flex:none}.bg .cd{width:100%;height:auto;display:block}.tx{font-size:13px;max-height:32dvh;overflow:auto;white-space:pre-line}.mt{color:var(--mu);font-size:12px;margin:2px 0}
 #toast{position:fixed;left:50%;top:12%;transform:translateX(-50%);background:#000d;padding:8px 14px;border-radius:20px;opacity:0;transition:.2s;pointer-events:none;z-index:9}#toast.on{opacity:1}
+
+body{background:linear-gradient(#0b1f66,#050d2b)}
+button{background:linear-gradient(#3a82e8,#143f96);border:1px solid #9fd0ff;border-radius:0;font-weight:700;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));text-shadow:0 1px 2px #000}
+button.on{background:linear-gradient(#ffd96a,#d19a1e);color:#222;text-shadow:none}button.sq{flex:none;padding:8px 12px}button.rd{background:linear-gradient(#e84a4a,#8f1616)}button.gn{background:linear-gradient(#58c24a,#1f6f1d)}
+#bld{padding:0;overflow:hidden}
+.dh,.dh2,.dh3,.chips{display:flex;gap:6px;padding:4px 6px;align-items:center;flex:none}
+.nm{flex:1;display:flex;align-items:center;gap:8px;background:#000;border:2px solid #25408f;border-radius:20px;padding:0 12px}.nm input{border:0;background:none;padding:8px 0;font-size:18px}
+.cnt{font-size:12px;line-height:1.5;min-width:118px}.cnt b{float:right}.st{flex:1;background:#000;border:2px solid #25408f;border-radius:20px;padding:8px 12px;font-size:12px;color:var(--gold)}
+.dh3 button{flex:1;font-size:12px;padding:8px 4px}.dh3 .sq{flex:none}
+.chips button{flex:1 1 0;font-size:12px;padding:8px 2px;line-height:1.1}.chips .sq{flex:none}.chips select{flex:1;background:#fff;color:#111;font-size:16px}
+.dkp{flex:none;height:54vw;overflow-y:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:4px 6px;align-content:start;background:#0a1a52;touch-action:pan-y}
+#bld.x .dkp{flex:1;height:auto;min-height:0}#bld.x .fx{display:none}#bld.x .clp{flex:none;height:46vw}
+.dv{display:flex;gap:8px;align-items:center;padding:6px;background:#0d2a78;border-top:2px solid #3b64d6;font-size:13px;flex:none}
+.clp{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;padding:6px;align-content:start;touch-action:pan-y;-webkit-overflow-scrolling:touch}.clp.b3{grid-template-columns:repeat(3,1fr)}
+.ci,.sl{position:relative}.ci .cd,.sl .cd{width:100%;height:auto;display:block}
+.lv{position:absolute;left:1px;top:1px;background:#000b;color:#ffd34a;font-size:10px;padding:0 3px;border-radius:4px}
+.cn{position:absolute;right:2px;bottom:2px;background:#e8b84a;color:#222;font-weight:700;border-radius:50%;width:18px;height:18px;text-align:center;font-size:12px;line-height:18px}
+.es{aspect-ratio:59/86;border:2px solid #2a4ab0;background:#0a2288;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#4fc3f7}
+.xh{grid-column:1/-1;font-size:12px;color:var(--gold);padding-top:4px}
+.bb{display:flex;gap:6px;padding:6px;background:#06102f;flex:none}.bb button{flex:1}.bb .sq{flex:none}
