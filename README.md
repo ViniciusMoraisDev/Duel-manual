@@ -15,7 +15,7 @@ App web instalável (PWA) para duelar no formato Speed Duel de forma manual: 3 z
 - iPhone (Safari): Compartilhar > Adicionar à Tela de Início.
 
 ## Como jogar
-Toque numa carta para ver em tamanho grande e abrir as ações. Para invocar/baixar, escolha a ação e toque numa zona vazia.
+Toque numa carta para ver em tamanho grande. Arraste cartas da mão para o campo (ou do campo para outra zona, Cemitério, Banidas ou Deck). No editor, segure uma carta da coleção e arraste para o deck; arraste a barra azul para redimensionar.
 Botões: Desfazer, Comprar, Moeda, Dado, Lado (vira a mesa para o outro jogador). Toque nos LP para dano/cura e na fase para avançar.
 
 ## Notas
