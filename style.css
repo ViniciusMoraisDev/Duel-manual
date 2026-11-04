@@ -93,3 +93,10 @@ body.dg .cell:not(.lp):not(.ph){border-style:solid}
 .end{position:absolute;inset:0;z-index:8;background:#000d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}.end h2{font-size:28px;color:var(--gold)}.end p{margin:0}
 .stc{position:relative}.tg{position:absolute;left:2px;top:2px;background:var(--gold);color:#222;font-size:10px;font-weight:700;padding:0 5px;border-radius:6px}
 .ghost{width:64px;transform:translate(-50%,-50%) scale(1.25)}
+
+/* v4 */
+.bn{position:absolute;right:2px;top:2px;width:17px;height:17px;border-radius:50%;color:#fff;font:700 11px/17px sans-serif;text-align:center;z-index:2;box-shadow:0 0 0 1.5px #fff;pointer-events:none}
+.bn.b0{background:#d11a1a}.bn.b1{background:#e08a00}.bn.b2{background:#1f7fd6}
+#cv{width:min(72vw,250px);align-self:center;border-radius:10px;box-shadow:0 4px 14px #000a;margin:6px 0;flex:none}
+.cf p{margin:8px 0 2px;color:var(--mu)}.cf select{width:100%}.cf .bh>div{flex:1}.cf input[type=range]{padding:0;width:100%}
+.lkg{display:grid;grid-template-columns:repeat(3,48px);gap:4px;margin:4px 0}.lkg button{padding:8px 0;font-size:18px}.lkg button.on{background:var(--gold);color:#222}
