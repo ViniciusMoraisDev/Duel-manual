@@ -135,3 +135,10 @@ body.dg .cell:not(.lp):not(.ph){border-style:solid}
 .fxw{flex:none;background:linear-gradient(#3a63c4,#2d52b0);border-top:2px dashed #9fbcf5aa}.fxw .chips{padding:5px 6px}
 .dv{background:linear-gradient(#3a63c4,#3560c0);border-top:2px solid #6f95ea;color:#fff}.dv button.sq{padding:10px 16px;font-size:20px}
 .clp{background:#0c1f66}.cnt div{display:flex;align-items:center}
+
+/* Menu estilo Duel Links */
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:14px}
+.menu-item{background:linear-gradient(135deg,#1b3a4c,#0a2233);border:2px solid #2f5a73;border-radius:16px;padding:24px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:transform .15s,box-shadow .15s;min-height:110px}
+.menu-item:active{transform:scale(.95);box-shadow:0 2px 8px #000a}
+.menu-icon{font-size:42px;line-height:1}
+.menu-item span{font-size:16px;font-weight:700;color:var(--gold)}
