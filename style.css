@@ -21,7 +21,9 @@ input,textarea{-webkit-user-select:text;user-select:text;width:100%}input[type=c
 .pc{position:relative;flex:none;height:100%}.pc .cd{height:100%}
 em{position:absolute;right:3px;bottom:2px;background:#000b;padding:0 5px;border-radius:6px;font-style:normal;font-size:11px}
 .hand{flex:1;display:flex;gap:4px;overflow-x:auto;min-width:0}.strip.top .hc+.hc{margin-left:-24px}
-.bd{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,minmax(0,1fr));gap:3px;padding:3px;background:linear-gradient(#10303f,#0e2634)}
+.bd{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,minmax(0,1fr));gap:3px;padding:3px;background:linear-gradient(#10303f,#0e2634);position:relative}
+.bd.hasbg::before{content:"";position:absolute;inset:0;background:inherit;opacity:.8;z-index:0}
+.bd.hasbg>*{position:relative;z-index:1}
 .cell{position:relative;container-type:size;border:1.5px dashed #ffffff30;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .cell .cd{height:min(100cqh,145.7cqw)}.cell.df>.cd{transform:rotate(-90deg)}
 .cell.m{border-color:#e8b84a77}.cell.s{border-color:#3fbf94aa}.cell.p{border-color:#4fc3f7aa;border-style:solid}.cell.e{border-color:#a97cd9aa}.cell.pile{border-style:solid;border-color:#ffffff22}
@@ -101,6 +103,10 @@ body.dg .cell:not(.lp):not(.ph){border-style:solid}
 .cf p{margin:8px 0 2px;color:var(--mu)}.cf select{width:100%}.cf .bh>div{flex:1}.cf input[type=range]{padding:0;width:100%}
 .lkg{display:grid;grid-template-columns:repeat(3,48px);gap:4px;margin:4px 0}.lkg button{padding:8px 0;font-size:18px}.lkg button.on{background:var(--gold);color:#222}
 
+.peekcard{transition:transform .5s cubic-bezier(.4,0,.2,1);width:180px;height:auto;filter:drop-shadow(0 8px 24px #000a)}
+.peek.open .peekcard{transform:translateY(0)}
+.peek{animation:fade .3s ease}
+@keyframes fade{from{opacity:0}to{opacity:1}}
 /* v5: filtro detalhado e menu de filtros (estilo Duel Links) */
 :root{--u:calc(min(100vw,480px)/720)}
 .fdl{position:fixed;inset:0;z-index:7}
