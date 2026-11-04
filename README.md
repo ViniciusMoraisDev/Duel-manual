@@ -18,10 +18,10 @@ App web instalável (PWA) para duelar no formato Speed Duel de forma manual: 3 z
 Toque numa carta para ver em tamanho grande e abrir as ações. Para invocar/baixar, escolha a ação e toque numa zona vazia.
 Botões: Desfazer, Comprar, Moeda, Dado, Lado (vira a mesa para o outro jogador). Toque nos LP para dano/cura e na fase para avançar.
 
-## Novidades (v2)
-- Montador de deck: arraste a barra azul (com a faixa clara) para subir/descer a aba de cartas. Segure uma carta da lista e arraste até o deck para adicionar; arraste uma carta do deck para a lista para remover.
-- Campo: Deck e Extra Deck no campo (Deck embaixo à direita, Cemitério acima dele, Extra Deck à esquerda, Banidas à esquerda da linha de monstros). As zonas de Mágica/Armadilha das pontas são as zonas de Pêndulo, com os cristais e a escala.
-- Arraste cartas da mão (ou do campo, ou de dentro do Cemitério/Extra Deck segurando) para as zonas. Soltar em zona ocupada permite colocar por cima ou embaixo (material Xyz). Em "Materiais" escolha qual carta retirar.
+## Novidades (v3)
+- Montador: a seta ▲/▼ esconde ou mostra filtros e busca (e lembra a escolha). A barra azul com a faixa clara sobe/desce a aba de cartas. Segure uma carta da lista e arraste até o deck. Ao tocar numa carta só aparece "Cards relacionados" (mesmo arquétipo/nome), e dá para arrastar os resultados. Segure uma carta do deck para completar a 2ª e a 3ª cópia; arraste uma carta do deck para a lista para remover.
+- Duelo: Deck embaixo à direita (toque: comprar, visualizar, embaralhar, render-se), Cemitério acima, Extra Deck à esquerda, Magia de Campo à esquerda dos monstros, Banidas na linha do meio. Nome e LP dos duelistas na barra de baixo (toque no LP para a calculadora de soma/subtração). Sem Main Phase 2.
+- Arraste cartas da mão ou do campo para as zonas. Soltar sobre outra carta empilha: a de cima fica visível e as de baixo aparecem à direita. Toque na pilha para escolher a carta e a ação. Ao mover a carta de cima, as de baixo vão junto.
 
 ## Notas
 - Imagens vêm de images.ygoprodeck.com e ficam em cache no aparelho. Uso pessoal apenas; para distribuir, hospede as imagens você mesmo.

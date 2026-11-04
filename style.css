@@ -23,7 +23,7 @@ em{position:absolute;right:3px;bottom:2px;background:#000b;padding:0 5px;border-
 .hand{flex:1;display:flex;gap:4px;overflow-x:auto;min-width:0}.strip.top .hc+.hc{margin-left:-24px}
 .bd{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,minmax(0,1fr));gap:3px;padding:3px;background:linear-gradient(#10303f,#0e2634)}
 .cell{position:relative;container-type:size;border:1.5px dashed #ffffff30;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.cell .cd{height:min(100cqh,145.7cqw)}.cell.df .cd{height:min(100cqw,145.7cqh);transform:rotate(-90deg)}
+.cell .cd{height:min(100cqh,145.7cqw)}.cell.df>.cd{transform:rotate(-90deg)}
 .cell.m{border-color:#e8b84a77}.cell.s{border-color:#3fbf94aa}.cell.p{border-color:#4fc3f7aa;border-style:solid}.cell.e{border-color:#a97cd9aa}.cell.pile{border-style:solid;border-color:#ffffff22}
 .cell.hl{background:#e8b84a33;border-style:solid;border-color:var(--gold)}
 .lb{position:absolute;left:3px;top:2px;font-size:9px;color:#fff6;pointer-events:none;line-height:1.1}
@@ -45,7 +45,7 @@ button.on{background:linear-gradient(#ffd96a,#d19a1e);color:#222;text-shadow:non
 .dh3 button{flex:1;font-size:12px;padding:8px 4px}.dh3 .sq{flex:none}
 .chips button{flex:1 1 0;font-size:12px;padding:8px 2px;line-height:1.1}.chips .sq{flex:none}.chips select{flex:1;background:#fff;color:#111;font-size:16px}
 .dkp{flex:none;height:var(--dkh,54vw);overflow-y:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:4px 6px;align-content:start;background:#0a1a52;touch-action:pan-y}
-#bld.x .dkp{flex:1;height:auto;min-height:0}#bld.x .fx{display:none}#bld.x .clp{flex:none;height:46vw}
+#bld.x .fx{display:none}
 .dv{position:relative;touch-action:none;cursor:ns-resize;display:flex;gap:8px;align-items:center;padding:14px 6px 6px;background:#0d2a78;border-top:2px solid #3b64d6;font-size:13px;flex:none}
 .clp{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;padding:6px;align-content:start;touch-action:pan-y;-webkit-overflow-scrolling:touch}.clp.b3{grid-template-columns:repeat(3,1fr)}
 .ci,.sl{position:relative}.ci .cd,.sl .cd{width:100%;height:auto;display:block}
@@ -74,3 +74,22 @@ button.on{background:linear-gradient(#ffd96a,#d19a1e);color:#222;text-shadow:non
 .dzh{outline:3px solid var(--gold);outline-offset:-3px;background-color:#e8b84a40!important}
 .dgs{opacity:.35}#sh.dgh{opacity:0;pointer-events:none}
 body.dg .cell:not(.lp):not(.ph){border-style:solid}
+
+/* v3 */
+.cell>.cd{position:relative;z-index:1}.gm{z-index:0}
+.cell.df,.cell.stk{overflow:visible;z-index:2}.cell.stk .cd{box-shadow:none}
+.sw{position:absolute;left:50%;top:50%;z-index:1}.sw .cd{display:block}
+.cell.f{border-color:#3fbf94aa}
+.cell em{z-index:3}
+#duel{position:relative}
+.tools{align-items:stretch;gap:4px}
+.tools>button{flex:none;width:36px;padding:0;font-size:16px}
+.lpb{flex:1;min-width:0;background:#0a1a52;border:1.5px solid #3b64d6;border-radius:6px;padding:2px 6px;display:flex;flex-direction:column;justify-content:center;line-height:1.1}
+.lpb small{font-size:10px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lpb b{font-size:18px;color:var(--gold)}
+.lpd{text-align:center;color:var(--mu)}.lpd b{display:block;font-size:34px;color:var(--gold)}
+.lpi{background:#000;border:2px solid #25408f;border-radius:10px;font-size:28px;text-align:right;padding:6px 12px;margin:6px 0;min-height:50px}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.kp button{padding:12px;font-size:20px}
+.bt.vc{flex-direction:column}.bt.vc>button{flex:none;padding:14px;font-size:16px}
+.end{position:absolute;inset:0;z-index:8;background:#000d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}.end h2{font-size:28px;color:var(--gold)}.end p{margin:0}
+.stc{position:relative}.tg{position:absolute;left:2px;top:2px;background:var(--gold);color:#222;font-size:10px;font-weight:700;padding:0 5px;border-radius:6px}
+.ghost{width:64px;transform:translate(-50%,-50%) scale(1.25)}

@@ -1,4 +1,4 @@
-const V='dm2',SH=['./','index.html','style.css','app.js','manifest.webmanifest'];
+const V='dm3',SH=['./','index.html','style.css','app.js','manifest.webmanifest'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(V).then(c=>c.addAll(SH))));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!=V&&x!='img').map(x=>caches.delete(x))))));
 self.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);if(r.method!='GET')return;
