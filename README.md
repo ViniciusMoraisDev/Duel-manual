@@ -18,16 +18,11 @@ App web instalável (PWA) para duelar no formato Speed Duel de forma manual: 3 z
 Toque numa carta para ver em tamanho grande e abrir as ações. Para invocar/baixar, escolha a ação e toque numa zona vazia.
 Botões: Desfazer, Comprar, Moeda, Dado, Lado (vira a mesa para o outro jogador). Toque nos LP para dano/cura e na fase para avançar.
 
-## Novidades (v4)
-- Deck principal de 20 a 30 cartas e deck adicional de até 9.
-- Filtro: tipo de monstro (Fusão, Sincro, Xyz, Link, Pêndulo, Ritual, Normal, Tuner), escala de Pêndulo, atributo, nível. Ao escolher Magias ou Armadilhas aparecem os tipos (Normal, Contínua, Rápida, Equipamento, Campo, Ritual / Normal, Contínua, Resposta).
-- Banlist: símbolos 0 (proibida), 1 (limitada) e 2 (semi-limitada) nas cartas, seguindo a lista escolhida (TCG, OCG ou Master Duel). TCG e OCG vêm do YGOPRODeck sempre atualizados; Master Duel vem do MasterDuelMeta.
-- Criador de cartas estilo DuelingBook, com prévia da carta, tipo, atributo, nível/rank, escala e efeito de Pêndulo, setas Link, ATK/DEF, tipo de magia/armadilha e ajuste da imagem. Cartas custom podem ser editadas.
-
-## Novidades (v3)
-- Montador: a seta ▲/▼ esconde ou mostra filtros e busca (e lembra a escolha). A barra azul com a faixa clara sobe/desce a aba de cartas. Segure uma carta da lista e arraste até o deck. Ao tocar numa carta só aparece "Cards relacionados" (mesmo arquétipo/nome), e dá para arrastar os resultados. Segure uma carta do deck para completar a 2ª e a 3ª cópia; arraste uma carta do deck para a lista para remover.
-- Duelo: Deck embaixo à direita (toque: comprar, visualizar, embaralhar, render-se), Cemitério acima, Extra Deck à esquerda, Magia de Campo à esquerda dos monstros, Banidas na linha do meio. Nome e LP dos duelistas na barra de baixo (toque no LP para a calculadora de soma/subtração). Sem Main Phase 2.
-- Arraste cartas da mão ou do campo para as zonas. Soltar sobre outra carta empilha: a de cima fica visível e as de baixo aparecem à direita. Toque na pilha para escolher a carta e a ação. Ao mover a carta de cima, as de baixo vão junto.
+## Novidades (v5)
+- Filtro Detalhado igual ao Duel Links: janela com abas Monstros e Magias/Armadilhas. Monstros: Tipo de Card, Atributo, Tipo, Nível/Classificação/Link, Escala de Pêndulo e Efeito do Card. Magias/Armadilhas: tipos de magia, tipos de armadilha e Efeito do Card. Dá para marcar várias opções; o botão da lixeira limpa tudo e FECHAR aplica.
+- O menu de filtros do montador segue o visual do Duel Links (ícones, faixa azul, botões Filtro, Cards populares e Busca por texto). A banlist (TCG, OCG, Master Duel) e "só Speed Duel" ficam em Configurações de Deck; o botão pequeno ao lado da ordenação alterna a banlist.
+- Arrastar cartas no montador: a carta acompanha o dedo em qualquer direção e, se não for solta num destino válido, volta suavemente para a posição de origem.
+- Removida a criação de cartas custom (as já criadas continuam funcionando nos decks).
 
 ## Notas
 - Imagens vêm de images.ygoprodeck.com e ficam em cache no aparelho. Uso pessoal apenas; para distribuir, hospede as imagens você mesmo.
