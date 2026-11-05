@@ -132,7 +132,7 @@ function draw(p){const P=G.p[p],c=P.deck.shift();if(!c)return toast('Deck vazio'
 function shufDeck(p){snap();shuf(G.p[p].deck);closeSh();toast('Deck embaralhado')}
 const LAB={m0:'Monstro',m1:'Monstro',m2:'Monstro',em:'Zona extra',fz:'Magia de Campo',s0:'',s1:'Mágica / Armadilha',s2:''};
 function cell(p,k){const P=G.p[p],dz=`data-z="${p}|${k}"`,slv=p==G.me;
-if(k=='deck'||k=='extra'){const a=P[k];return`<div class="cell pile" ${dz} onclick="${k=='deck'?`deckMenu(${p})`:`pile(${p},'extra')`}">${a.length?cardEl(a[0],1,slv):''}<span class="lb">${NM[k]}</span><em>${a.length}</em></div>`}
+if(k=='deck'||k=='extra'){const a=P[k];return`<div class="cell pile deckcell" ${dz} ${a.length&&slv?`data-drag="d" data-id="${a[0].u}" data-z="${p}|deck"`:''} onclick="${k=='deck'?`deckMenu(${p})`:`pile(${p},'extra')`}">${a.length?cardEl(a[0],1,slv):''}<span class="lb">${NM[k]}</span><em>${a.length}</em></div>`}
 if(k=='gy'||k=='ban'){const a=P[k],t=a[a.length-1];return`<div class="cell pile" ${dz} ${t?`data-drag="p" data-id="${t.u}"`:''} onclick="pile(${p},'${k}')">${t?cardEl(t,0):''}<span class="lb">${NM[k]}</span><em>${a.length}</em></div>`}
 const c=P.s[k],pd=k=='s0'||k=='s2',n=c&&c.mat?c.mat.length:0,sc=c&&!c.fd&&/Pendulum/i.test(c.type||'')&&c.sc!=null?c.sc:'';
 return`<div class="cell ${k[0]}${pd?' pd':''}${c&&c.df?' df':''}${n?' stk':''}${G.pend?' hl':''}" ${dz} ${c?`data-drag="f" data-id="${c.u}"`:''} onclick="slot(${p},'${k}')">${c?(n?stackHtml(c,slv):cardEl(c,c.fd,slv)):`<span class="lb">${LAB[k]}</span>`}${pd?`<span class="gm ${k=='s0'?'r':'b'}">${sc}</span>`:''}</div>`}
@@ -151,7 +151,9 @@ const peekBtn=f.z=='hand'&&!mat?B(' Revelar para oponente',`peek('${u}')`):'';
 sheet(det(c,fld&&c.fd&&f.p!=G.me)+'<div class="bt">'+[peekBtn,mat?to('Retirar → Cemitério','gy'):'',B(ex?'Invocar (ATK)':'Invocar / Ativar',`pend('${u}',0,0)`),ex?B('Invocar (DEF)',`pend('${u}',0,1)`):'',mat?'':B('Baixar',`pend('${u}',1,${isMon(c)?1:0})`),mat?B('Trazer para o topo',`toTop('${u}')`):'',fld?B('Virar',`flip('${u}','fd')`):'',fld&&isMon(c)?B('Posição',`flip('${u}','df')`):'',fld?B('Mover de zona',`pend('${u}',${c.fd},${c.df})`):'',f.z!='hand'?to('Mão','hand'):'',!mat&&f.z!='gy'?to('Cemitério','gy'):'',f.z!='ban'?to('Banir','ban'):'',ex?(f.z!='extra'?to('Extra Deck','extra'):''):to('Topo do deck','deck','top:1')+to('Fundo do deck','deck')].join('')+'</div>')}
 let LPI='';
 function lpSheet(p){LPI='';lpDraw(p)}
-function lpDraw(p){sheet(`<h3>${esc(G.p[p].name)}</h3><div class="lpd"><small>Pontos de vida atual</small><b>${G.p[p].lp}</b></div><input id="lpv" type="text" inputmode="decimal" placeholder="Ex: +500 ou -300" style="width:100%;text-align:center;font-size:22px;padding:10px;margin:8px 0" onkeydown="if(event.key==='Enter')lpApply2(${p})"></div>`)}
+function lpDraw(p){sheet(`<h3>${esc(G.p[p].name)}</h3><div class="lpd"><small>Pontos de vida atual</small><b>${G.p[p].lp}</b></div><div class="kp"><button class="gn" onclick="lpSgn('+')">+</button><input id="lpv" type="text" inputmode="decimal" value="0" style="grid-column:2;text-align:center;font-size:22px;padding:10px" oninput="lpIn(this)" onkeydown="if(event.key==='Enter')lpApply2(${p})"><button class="rd" onclick="lpSgn('−')">−</button></div><div class="bt"><button class="gn" onclick="lpApply2(${p})">Aplicar</button><button class="rd" onclick="lpA(${p},-1)">− Diminuir</button><button class="gn" onclick="lpA(${p},1)">+ Somar</button></div>`)}
+function lpSgn(s){const e=$('#lpv');let v=e.value;const cur=v.startsWith('+')||v.startsWith('−');if(cur)v=v.slice(1);e.value=s+v;lpIn(e)}
+function lpIn(e){let v=e.value.replace(/[^0-9+−.]/g,'');if(v.length>1&&v[0]=='+')v=v.slice(1);if((v.match(/−/g)||[]).length>1)v=v.replace(/−/g,'');if(v.length>6)v=v.slice(0,6);e.value=v||'0'}
 function lpApply2(p){const v=parseFloat($('#lpv').value)||0;if(!v&&v!==0)return toast('Digite um valor');snap();G.p[p].lp=Math.max(0,G.p[p].lp+v);closeSh();render()}
 /* ---------- pilhas (Xyz): carta solta por cima, as de baixo aparecem à direita ---------- */
 function place(u,p,k,o){const t=G.p[p].s[k];if(t&&t.u!=u)return stk(u,p,k,1,o.fd||0,o.df||0);mv(u,p,k,o)}
@@ -173,7 +175,7 @@ function relGo(c){closeSh();(async()=>{let a=c.ar;if(a===undefined&&/^\d+$/.test
 const w=String(c.name).split(/\s+/)[0];Object.assign(B,{t:'',q:'',sd:0,staple:0,f:fnew(),rel:a?{a}:{n:w.length>2?w:c.name}});reload()})()}
 /* ---------- arrastar e soltar (deck e duelo) ---------- */
 const DR={s:null,z:null};let noClk=0;
-const dgCard=s=>s.k=='col'?B.col[s.id]:s.k=='dk'?B.c[s.id]:(find(s.id)||{}).c;
+const dgCard=s=>s.k=='col'?B.col[s.id]:s.k=='dk'?B.c[s.id]:s.k=='d'?G.p[s.p].deck[0]:(find(s.id)||{}).c;
 const dgZ=(x,y)=>{const e=document.elementFromPoint(x,y);return e&&e.closest('[data-z]')};
 function dgSet(z){if(DR.z&&DR.z!==z)DR.z.classList.remove('dzh');DR.z=z;if(z)z.classList.add('dzh')}
 function dgPos(x,y){const s=DR.s;s.g.style.left=x+'px';s.g.style.top=y+'px';dgSet(dgZ(x,y))}
@@ -184,7 +186,7 @@ g.style.transition='left .2s ease,top .2s ease,width .2s ease,transform .2s ease
 requestAnimationFrame(()=>{g.style.left=(r.left+r.width/2)+'px';g.style.top=(r.top+r.height/2)+'px';g.style.width=r.width+'px';g.style.transform='translate(-50%,-50%) scale(1)';g.style.opacity='.7'});
 setTimeout(()=>{g.remove();s.t.classList.remove('dgs')},230)}
 function dgBegin(){const s=DR.s;if(!s||s.on)return;clearTimeout(s.tm);const c=dgCard(s);if(!c){DR.s=null;return}s.on=1;
-const g=document.createElement('div');g.className='ghost';g.innerHTML=cardEl(c,s.k=='f'?c.fd:0);document.body.appendChild(g);s.g=g;s.t.classList.add('dgs');document.body.classList.add('dg');
+const g=document.createElement('div');g.className='ghost';g.innerHTML=cardEl(c,s.k=='f'?c.fd:(s.k=='d'?1:0));document.body.appendChild(g);s.g=g;s.t.classList.add('dgs');document.body.classList.add('dg');
 if(s.k=='p')$('#sh').classList.add('dgh');if(navigator.vibrate)navigator.vibrate(12);dgPos(s.lx,s.ly)}
 function dgEnd(drop){const s=DR.s;if(!s)return;dgClr(s);DR.s=null;if(s.cp)noClk=Date.now()+450;if(!s.on)return;
 const z=DR.z?DR.z.dataset.z:null;noClk=Date.now()+450;let done=false;
@@ -195,15 +197,17 @@ function dkCopy(s){if(DR.s!==s||s.mv0||!s.cid)return;const c=B.c.find(x=>x.id==s
 addC(c);if(B.c.filter(x=>x.id==c.id).length<=n)return;s.cp=(s.cp||0)+1;if(navigator.vibrate)navigator.vibrate(20);toast((n+1)+' cópias no deck')}
 function dgDrop(s,z){if(s.k=='col'){if(z!='bdeck')return false;const n=B.c.length;addC(B.col[s.id]);return B.c.length>n}
 if(s.k=='dk'){if(z!='bcol'||s.cid==null)return false;const n=B.c.length;rmId(s.cid);return B.c.length<n}
+if(s.k=='d'){const[a,k]=z.split('|');if(k!='hand'||+a!=s.p)return false;draw(s.p);return true}
+if(s.k=='h'){const[a,k]=z.split('|');if(k!='deck'||+a!=s.p)return false;const f=find(s.id);if(!f||f.par)return false;snap();G.p[s.p].deck.unshift(f.c);G.p[s.p].hand.splice(f.i,1);closeSh();render();return true}
 const[a,k]=z.split('|');return k?dropCard(s.id,+a,k):false}
 function dropCard(u,p,k){const f=find(u);if(!f)return false;const c=f.c;
 if(PZ.includes(k)){if(f.z==k&&!f.par)return false;if(k=='extra'&&!isEx(c)){toast('Só cartas do Deck Adicional');return false}if(k=='deck'&&isEx(c)){toast('Carta do Deck Adicional não vai ao deck');return false}mv(u,p,k,k=='deck'?{top:1}:{});return true}
 if(f.p==p&&f.z==k&&!f.par)return false;
 place(u,p,k,PZ.includes(f.z)||f.par?{fd:0,df:0}:{fd:c.fd,df:c.df});return true}
 document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('[data-drag]');if(!t||DR.s||(e.pointerType=='mouse'&&e.button))return;
-const k=t.dataset.drag,touch=e.pointerType!='mouse',s=DR.s={t,k,id:t.dataset.id,r:t.getBoundingClientRect(),x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,on:0,touch,pid:e.pointerId};
+const k=t.dataset.drag,touch=e.pointerType!='mouse',dz=t.dataset.z||"",s=DR.s={t,k,id:t.dataset.id,p:dz?+dz.split("|")[0]:0,r:t.getBoundingClientRect(),x:e.clientX,y:e.clientY,lx:e.clientX,ly:e.clientY,on:0,touch,pid:e.pointerId};
 if(k=='dk'){const cd=B.c[s.id];s.cid=cd&&cd.id;s.c1=setTimeout(()=>dkCopy(s),700);s.c2=setTimeout(()=>dkCopy(s),1300)}
-if(touch&&(k=='col'||k=='dk'||k=='p'))s.tm=setTimeout(dgBegin,220)});
+if(touch&&(k=='col'||k=='dk'||k=='p'||k=='d'))s.tm=setTimeout(dgBegin,220)});
 document.addEventListener('pointermove',e=>{const s=DR.s;if(!s||e.pointerId!=s.pid)return;s.lx=e.clientX;s.ly=e.clientY;
 const dx=e.clientX-s.x,dy=e.clientY-s.y,d=Math.hypot(dx,dy);
 if(!s.on){if(s.tm){if(d>10){dgClr(s);DR.s=null}return}

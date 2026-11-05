@@ -148,3 +148,5 @@ body.dg .cell:not(.lp):not(.ph){border-style:solid}
 .menu-item:active{transform:scale(.95);box-shadow:0 2px 8px #000a}
 .menu-icon{font-size:42px;line-height:1}
 .menu-item span{font-size:16px;font-weight:700;color:var(--gold)}
+.deckcell{position:relative}.deckcell .cd{height:min(100cqh,145.7cqw)}.deckcell .lb{position:absolute;left:3px;top:2px;font-size:9px;color:#fff6;pointer-events:none;line-height:1.1}
+.deckghost{position:fixed;z-index:30;width:58px;pointer-events:none;transform:translate(-50%,-50%) scale(1.15);filter:drop-shadow(0 8px 8px #000a);opacity:.95}.deckghost .cd{width:100%;height:auto;display:block}
